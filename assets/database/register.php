@@ -1,38 +1,69 @@
 <?php
-require 'config.php';  // Include the database connection file
+// Database connection
+require_once 'config.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-    $email = trim($_POST['email']);
-    
-    // Validate fields
-    if (empty($username) || empty($password) || empty($email)) {
-        echo "All fields are required.";
-        exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if all the form fields are set
+    if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['signup-password']) && isset($_POST['confirm-password'])) {
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $password = $_POST['signup-password'];
+        $confirm_password = $_POST['confirm-password'];
+
+        // Check if the username already exists in the database
+        $checkUsernameQuery = "SELECT * FROM users WHERE username = :username";
+        $stmt = $pdo->prepare($checkUsernameQuery);
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            echo "The username is already taken. Please choose another one.";
+        } else {
+            // Check if the email already exists
+            $checkEmailQuery = "SELECT * FROM users WHERE email = :email";
+            $stmt = $pdo->prepare($checkEmailQuery);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                echo "The email is already registered. Please try a different one.";
+            } else {
+                // Proceed with registration if the username and email are unique
+                if ($password === $confirm_password) {
+                    // Hash the password
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    // Insert the new user into the database
+                    $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->bindParam(':username', $username);
+                    $stmt->bindParam(':email', $email);
+                    $stmt->bindParam(':password', $hashedPassword);
+
+                    if ($stmt->execute()) {
+                        // Insert profile data for the new user
+                        $user_id = $pdo->lastInsertId(); // Get the user ID from the last inserted row
+                        $insertProfileQuery = "INSERT INTO profiles (user_id) VALUES (:user_id)";
+                        $profileStmt = $pdo->prepare($insertProfileQuery);
+                        $profileStmt->bindParam(':user_id', $user_id);
+
+                        if ($profileStmt->execute()) {
+                            // Redirect to the login page after successful registration
+                            header("Location: ../../index.php");
+                            exit();
+                        } else {
+                            echo "There was an error inserting the profile data. Please try again.";
+                        }
+                    } else {
+                        echo "There was an error during registration. Please try again.";
+                    }
+                } else {
+                    echo "Passwords do not match. Please try again.";
+                }
+            }
+        }
+    } else {
+        echo "Please fill in all fields.";
     }
-
-    // Check if username or email already exists
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username OR email = :email");
-    $stmt->execute(['username' => $username, 'email' => $email]);
-    $user = $stmt->fetch();
-
-    if ($user) {
-        echo "Username or Email already exists!";
-        exit;
-    }
-
-    // Hash the password before storing it
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    // Insert new user into the database
-    $stmt = $pdo->prepare("INSERT INTO users (username, password, email) VALUES (:username, :password, :email)");
-    $stmt->execute([
-        'username' => $username,
-        'password' => $hashedPassword,
-        'email' => $email
-    ]);
-
-    echo "Registration successful! You can now log in.";
 }
 ?>

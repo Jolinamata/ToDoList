@@ -1,15 +1,16 @@
 <?php
-$host = 'localhost';  // Hostname of the database server
-$dbname = 'your_database';  // Your database name
-$username = 'root';  // Database username
-$password = '';  // Database password (leave empty if you use default)
+// Database configuration
+$host = 'localhost'; // Database host
+$db = 'todo'; // Database name (updated)
+$user = 'root'; // Database user
+$pass = ''; // Database password (for XAMPP, use an empty string)
 
 try {
-    // Create a PDO connection
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // Enable error handling
+    // Create a PDO instance to connect to the database
+    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    // Set the PDO error mode to exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo 'Connection failed: ' . $e->getMessage();
-    exit;
+    echo "Connection failed: " . $e->getMessage();
 }
 ?>
