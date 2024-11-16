@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2024 at 03:41 AM
+-- Generation Time: Nov 16, 2024 at 01:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -52,8 +52,23 @@ CREATE TABLE `tasks` (
   `task_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `task_text` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `completed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`task_id`, `user_id`, `task_text`, `created_at`, `completed`) VALUES
+(1, 3, 'awwdaw', '2024-11-16 05:00:21', 0),
+(2, 3, 'awwdaw', '2024-11-16 05:02:07', 1),
+(3, 3, 'awwdaw', '2024-11-16 05:04:07', 1),
+(4, 3, 'ddwada', '2024-11-16 05:04:20', 1),
+(5, 3, 'awwdaw', '2024-11-16 05:04:51', 1),
+(6, 3, 'dwaawdwa', '2024-11-16 05:05:09', 1),
+(7, 3, 'wadda', '2024-11-16 05:15:50', 0),
+(8, 3, 'ddwada', '2024-11-16 05:16:15', 0);
 
 -- --------------------------------------------------------
 
@@ -122,7 +137,7 @@ ALTER TABLE `profiles`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `users`

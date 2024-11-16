@@ -3,8 +3,8 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    height: 100vh; /* Make sure the height only takes up the visible screen */
-    overflow: hidden; /* Prevent scrolling */
+    height: 100vh;
+    overflow: hidden;
     background-color: #f0f0f0;
 }
 
@@ -13,18 +13,15 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* Container takes the full screen height */
+    height: 100vh;
     background-image: url(https://i.pinimg.com/originals/1b/74/ed/1b74ed53670b66f50f4a0a2d4c59f7f5.gif);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    width: 100%; /* Full width of the screen */
-    overflow: hidden; /* Prevent scrolling */
+    width: 100%;
+    overflow: hidden;
 }
-.content-section, p{
-    color: white;
 
-}
 #form-container {
     background: rgba(219, 50, 211, 0.7);
     padding: 30px;
@@ -36,8 +33,8 @@ body, html {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    max-height: 80vh; /* Limit the height of the form container */
-    overflow-y: none; /* In case the content exceeds, enable scroll within the form */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 #form-container input {
@@ -75,156 +72,63 @@ button:hover {
     cursor: pointer;
 }
 
-
 /* Dashboard Styling */
 .dashboard-container {
     display: flex;
     flex-direction: row;
     height: 100vh;
-    max-height: 100vh; /* Prevents overflow */
-    width: 100vw; /* Ensure it fits the viewport width */
+    width: 100vw;
     background-image: url(https://i.pinimg.com/originals/1b/a1/98/1ba198f2a10e4ab7be59bde8bfec8baa.gif);
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
 }
 
-.sidebar {
-    width: 220px; /* Adjusted width for better balance */
-    background: #3bbbe2;
-    color: white;
-    padding: 20px;
-    height: 100%;
-    display: center;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.main-content {
-    flex: 1;
-    padding: 5px;
-    position: column;
-    overflow-y: auto; /* Allows scrolling if content overflows */
-}
-
-.search-container {
-    position: absolute;
-    top: 20px; /* Adjusted to give more space */
-    right: 20px;
-    width: 250px; /* Adjusted size */
-    height: 30px;
-}
-
-#task-form {
-    margin-bottom: 15px; /* Adjusted space for better balance */
-    display: flex;
-    justify-content: flex-start; /* Align items to the start (left) */
-    gap: 20px; /* Space between the input and button */
-    align-items: center;
-}
-#task-form input {
+/* Style for input fields with icons */
+.input-container {
+    position: relative;
     margin-bottom: 15px;
-    width: 60%;
-    padding: 10px; /* Added padding for better input field appearance */
+}
+
+.input-container input {
+    width: 100%;
+    padding: 10px 10px 10px 40px; /* Adjust padding to make room for the icon */
+    border: 1px solid #ccc;
     border-radius: 5px;
-    border: 1px solid #030101f8;
-    display:flex;
+    font-size: 14px;
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
+    transition: padding-left 0.3s ease; /* Smooth transition when placeholder disappears */
 }
 
-.task-item {
-    padding: 2px;
-    margin: 5px 0;
-    background: #8d22e4;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 5px;
-    width: 60%; /* Adjust input width */
-   
+.input-container i {
+    position: absolute;
+    left: 15px; /* Move icon further to the right */
+    top: 55%;  /* Move icon down */
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 18px;
+    transition: opacity 0.3s ease; /* Smooth transition for the icon */
 }
 
-#rating-summary {
-    margin-top: 20px;
+/* Hide the icon when input is focused or contains text */
+.input-container input:focus + i,
+.input-container input:not(:placeholder-shown) + i {
+    opacity: 0; /* Hide the icon */
 }
 
-#rating-list li {
-    list-style-type: none;
-    margin: 5px 0;
-    background: #eef;
-    padding: 5px;
-    border-radius: 5px;
+/* Hide placeholder text when input is focused or contains text */
+.input-container input:focus::placeholder,
+.input-container input:not(:placeholder-shown)::placeholder {
+    opacity: 0; /* Hide placeholder text */
 }
 
-/* Sidebar Styling */
-.sidebar {
-    width: 220px; /* Adjusted width for better balance */
-    background: #3bbbe2;
-    color: white;
-    padding: 10px 15px; /* Reduced padding for compression */
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Align items to the top */
-    gap: 15px; /* Space between sidebar items */
+.input-container input::placeholder {
+    padding-left: 20px; /* Ensure placeholder text doesn't overlap with the icon */
 }
 
-.sidebar .sidebar-item {
-    font-size: 14px; /* Smaller font for better alignment */
-    padding: 8px 10px;
-    text-align: left;
-    background-color: #2a9dbc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.sidebar .sidebar-item:hover {
-    background-color: #2196f3;
-}
-
-/* Media Query for smaller screens */
-@media (max-width: 1200px) {
-    .sidebar {
-        width: 180px; /* Smaller sidebar on smaller screens */
-    }
-    .search-container {
-        width: 150px; /* Reduced size */
-    }
-}
-
-@media (max-width: 768px) {
-    .dashboard-container {
-        flex-direction: column; /* Stack sidebar and content vertically */
-        height: auto; /* Remove fixed height for mobile */
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto; /* Allow sidebar to shrink */
-        flex-direction: column; /* Ensure items stack vertically */
-        justify-content: flex-start;
-    }
-
-    .sidebar .sidebar-item {
-        font-size: 12px; /* Further reduce font size for mobile */
-        padding: 6px 8px; /* Adjust padding for smaller screens */
-    }
-
-    .main-content {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .search-container {
-        position: relative;
-        top: 0;
-        right: 0;
-        width: 100%;
-    }
-
-    #task-form input {
-        width: 70%; /* Adjust for better mobile input */
-    }
+.input-container input:focus {
+    border-color: #4CAF50; /* Focus effect for input fields */
+    outline: none;
 }
 

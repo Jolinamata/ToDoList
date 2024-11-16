@@ -1,0 +1,258 @@
+/* General Styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh; /* Make sure the height only takes up the visible screen */
+    overflow: hidden; /* Prevent scrolling */
+    background-color: #f0f0f0;
+}
+
+/* Login/Signup Form Style */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Container takes the full screen height */
+    background-image: url(https://i.pinimg.com/originals/1b/74/ed/1b74ed53670b66f50f4a0a2d4c59f7f5.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%; /* Full width of the screen */
+    overflow: hidden; /* Prevent scrolling */
+}
+.content-section, p{
+    color: white;
+
+}
+#form-container {
+    background: rgba(219, 50, 211, 0.7);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    animation: lightRotate 3s infinite linear;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 80vh; /* Limit the height of the form container */
+    overflow-y: none; /* In case the content exceeds, enable scroll within the form */
+}
+
+#form-container input {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 93%;
+}
+
+button {
+    padding: 10px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #8f5202;
+}
+
+/* Rotating Light Animation */
+@keyframes lightRotate {
+    0% { background: rgba(219, 50, 211, 0.7); }
+    33% { background: rgba(255, 0, 0, 0.7); }
+    66% { background: rgba(0, 0, 255, 0.7); }
+    100% { background: rgba(219, 50, 211, 0.7); }
+}
+
+#toggle-form span {
+    color: rgb(5, 240, 5);
+    cursor: pointer;
+}
+
+
+/* Dashboard Styling */
+.dashboard-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    max-height: 100vh; /* Prevents overflow */
+    width: 100vw; /* Ensure it fits the viewport width */
+    background-image: url(https://i.pinimg.com/originals/1b/a1/98/1ba198f2a10e4ab7be59bde8bfec8baa.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+.sidebar {
+    width: 220px; /* Adjusted width for better balance */
+    background: #3bbbe2;
+    color: white;
+    padding: 20px;
+    height: 100%;
+    display: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.main-content {
+    flex: 1;
+    padding: 5px;
+    position: column;
+    overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+.search-container {
+    position: absolute;
+    top: 20px; /* Adjusted to give more space */
+    right: 20px;
+    width: 250px; /* Adjusted size */
+    height: 30px;
+}
+
+#task-form {
+    margin-bottom: 15px; /* Adjusted space for better balance */
+    display: flex;
+    justify-content: flex-start; /* Align items to the start (left) */
+    gap: 20px; /* Space between the input and button */
+    align-items: center;
+}
+#task-form input {
+    margin-bottom: 15px;
+    width: 60%;
+    padding: 10px; /* Added padding for better input field appearance */
+    border-radius: 5px;
+    border: 1px solid #030101f8;
+    display:flex;
+}
+
+.task-item {
+    padding: 2px;
+    margin: 5px 0;
+    background: #8d22e4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    width: 60%; /* Adjust input width */
+   
+}
+
+#rating-summary {
+    margin-top: 20px;
+}
+
+#rating-list li {
+    list-style-type: none;
+    margin: 5px 0;
+    background: #eef;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 220px; /* Adjusted width for better balance */
+    background: #3bbbe2;
+    color: white;
+    padding: 10px 15px; /* Reduced padding for compression */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align items to the top */
+    gap: 15px; /* Space between sidebar items */
+}
+
+.sidebar .sidebar-item {
+    font-size: 14px; /* Smaller font for better alignment */
+    padding: 8px 10px;
+    text-align: left;
+    background-color: #2a9dbc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.sidebar .sidebar-item:hover {
+    background-color: #2196f3;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 180px; /* Smaller sidebar on smaller screens */
+    }
+    .search-container {
+        width: 150px; /* Reduced size */
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column; /* Stack sidebar and content vertically */
+        height: auto; /* Remove fixed height for mobile */
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto; /* Allow sidebar to shrink */
+        flex-direction: column; /* Ensure items stack vertically */
+        justify-content: flex-start;
+    }
+
+    .sidebar .sidebar-item {
+        font-size: 12px; /* Further reduce font size for mobile */
+        padding: 6px 8px; /* Adjust padding for smaller screens */
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .search-container {
+        position: relative;
+        top: 0;
+        right: 0;
+        width: 100%;
+    }
+
+    #task-form input {
+        width: 70%; /* Adjust for better mobile input */
+    }
+}
+
+/* Adjust button order */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-button {
+    padding: 10px;
+    background-color: #2a9dbc;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Adjust order of buttons */
+.nav-button:nth-child(1) {
+    order: 1; /* To-Do List */
+}
+
+.nav-button:nth-child(2) {
+    order: 3; /* Settings */
+}
+
+.nav-button:nth-child(3) {
+    order: 2; /* Statistics */
+}

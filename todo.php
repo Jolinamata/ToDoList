@@ -1,15 +1,6 @@
 <?php
-// Include database connection
-include('assets/database/config.php');
-session_start();
-
-// Redirect to login page if not logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit;
-}
-
-$user_id = $_SESSION['user_id'];
+// Include the backend logic to fetch tasks
+include('assets/database/tasks_backend.php');
 ?>
 
 <!DOCTYPE html>
@@ -18,51 +9,110 @@ $user_id = $_SESSION['user_id'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List Dashboard</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/todo.css">
+    <!-- Add FontAwesome CDN for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Dashboard Container -->
     <div class="dashboard-container">
         <aside class="sidebar">
             <h2>Dashboard</h2>
-            <ul>
-                <li onclick="showSection('tasks')">To-Do List</li>
-                <li onclick="showSection('stats')">Statistics</li>
-                <li onclick="showSection('settings')">Settings</li>
-            </ul>
+            <div class="button-group">
+                <button onclick="showSection('tasks')" class="nav-button"><i class="fas fa-list"></i> To-Do List</button>
+                <button onclick="showSection('stats')" class="nav-button"><i class="fas fa-chart-pie"></i> Statistics</button>
+                <button onclick="showSection('Dashboard')" class="nav-button"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+            </div>
             <form method="POST" action="index.php">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </form>
         </aside>
         
         <main class="main-content">
-            <!-- Search Bar -->
             <div class="search-container" id="search-container">
-                <input type="text" id="searchInput" placeholder="Search tasks..." oninput="searchTasks()">
+                <input type="text" id="searchInput" placeholder="Search tasks...">
             </div>
 
             <!-- To-Do List Section -->
             <section id="tasks" class="content-section">
-                <h2>To-Do List</h2>
+                <h2><i class="fas fa-tasks"></i> To-Do List</h2>
                 <div id="task-form">
-                    <input type="text" id="taskInput" placeholder="Add a new task">
-                    <button onclick="addTask()">Add Task</button>
+                    <form method="POST" action="todo.php">
+                        <input type="text" name="task_text" placeholder="Add a new task" required>
+                        <button type="submit"><i class="fas fa-plus"></i> Add Task</button>
+                    </form>
                 </div>
-                <ul id="taskList"></ul>
+                <ul id="taskList">
+                    <?php foreach ($tasks as $task): ?>
+                        <li>
+                            <?= htmlspecialchars($task['task_text']) ?> - <?= htmlspecialchars($task['created_at']) ?>
+                            <form method="GET" action="todo.php" style="display:inline;">
+                                <?php if (!$task['completed']): ?>
+                                    <button type="submit" name="complete" value="<?= $task['task_id'] ?>"><i class="fas fa-check-circle"></i> Complete</button>
+                                <?php else: ?>
+                                    <button type="submit" name="uncomplete" value="<?= $task['task_id'] ?>"><i class="fas fa-times-circle"></i> Uncomplete</button>
+                                <?php endif; ?>
+                            </form>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </section>
 
             <!-- Statistics Section -->
             <section id="stats" class="content-section" style="display: none;">
-                <h2>Statistics</h2>
-                <p>Total Tasks: <span id="totalTasks">0</span></p>
-                <p>Completed Tasks: <span id="completedTasks">0</span></p>
-                <p>Pending Tasks: <span id="pendingTasks">0</span></p>
+                <h2><i class="fas fa-chart-pie"></i> Statistics</h2>
+                <p>Total Tasks: <span id="totalTasks"><?= count($tasks) ?></span></p>
+                <p>Completed Tasks: <span id="completedTasks"><?= count(array_filter($tasks, fn($task) => $task['completed'] == 1)) ?></span></p>
+                <p>Pending Tasks: <span id="pendingTasks"><?= count(array_filter($tasks, fn($task) => $task['completed'] == 0)) ?></span></p>
             </section>
 
-            <!-- Settings Section -->
-            <section id="settings" class="content-section" style="display: none;">
-                <h2>Settings</h2>
-                <p>Settings content can be added here.</p>
+            <!-- Dashboard Section -->
+            <section id="Dashboard" class="content-section" style="display: none;">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                <h3>Total Tasks</h3>
+                <table id="totalTasksTable">
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Date/Time</th>
+                    </tr>
+                    <?php foreach ($tasks as $task): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($task['task_text']) ?></td>
+                        <td><?= htmlspecialchars($task['created_at']) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </table>
+
+                <h3>Completed Tasks</h3>
+                <table id="completedTasksTable">
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Date/Time</th>
+                    </tr>
+                    <?php foreach ($tasks as $task): ?>
+                        <?php if ($task['completed']): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($task['task_text']) ?></td>
+                                <td><?= htmlspecialchars($task['created_at']) ?></td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </table>
+
+                <h3>Pending Tasks</h3>
+                <table id="pendingTasksTable">
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Date/Time</th>
+                    </tr>
+                    <?php foreach ($tasks as $task): ?>
+                        <?php if (!$task['completed']): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($task['task_text']) ?></td>
+                                <td><?= htmlspecialchars($task['created_at']) ?></td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </table>
             </section>
         </main>
     </div>
